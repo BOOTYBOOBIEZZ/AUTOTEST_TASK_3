@@ -1,6 +1,3 @@
-import random
-import string
-
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
@@ -9,11 +6,7 @@ from ui.web_element import WebElement
 
 
 class AlertsPage(BasePage):
-    URL = "https://the-internet.herokuapp.com/javascript_alerts"
-
     def __init__(self, page: Page):
-        super().__init__(page)
-
         self.actions = PageActions(page)
 
         self.js_alert_button = WebElement(
@@ -37,9 +30,6 @@ class AlertsPage(BasePage):
             description="Текст результата",
             page=page,
         )
-
-    def open(self):
-        self.page.goto(self.URL)
 
     def click_js_alert_button(self):
         return self.actions.run_and_accept_alert(
@@ -67,6 +57,5 @@ class AlertsPage(BasePage):
     def get_result_text(self) -> str:
         return self.actions.get_text(self.result_text)
 
-    def generate_random_text(self, length: int = 10) -> str:
-        letters = string.ascii_letters
-        return "".join(random.choice(letters) for _ in range(length))
+    def wait_for_open(self):
+        self.js_alert_button.locator.wait_for(state="visible")

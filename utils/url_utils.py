@@ -1,26 +1,14 @@
-from urllib.parse import quote, urlsplit, urlunsplit
+BASE_URL = "https://the-internet.herokuapp.com"
 
-
-def embed_credentials_in_url(url: str, username: str, password: str) -> str:
-    parsed_url = urlsplit(url)
-    credentials = f"{quote(username, safe='')}:{quote(password, safe='')}"
-    host = parsed_url.hostname or ""
-
-    if parsed_url.port is not None:
-        host = f"{host}:{parsed_url.port}"
-
-    if host:
-        netloc = f"{credentials}@{host}"
-    else:
-        cleaned_netloc = parsed_url.netloc.lstrip("@")
-        netloc = f"{credentials}@{cleaned_netloc}"
-
-    return urlunsplit(
-        (
-            parsed_url.scheme,
-            netloc,
-            parsed_url.path,
-            parsed_url.query,
-            parsed_url.fragment,
-        )
-    )
+ALERTS_URL = f"{BASE_URL}/javascript_alerts"
+DOWNLOAD_URL = f"{BASE_URL}/download"
+UPLOAD_URL = f"{BASE_URL}/upload"
+FRAMES_URL = f"{BASE_URL}/nested_frames"
+CONTEXT_MENU_URL = f"{BASE_URL}/context_menu"
+SCROLL_URL = f"{BASE_URL}/infinite_scroll"
+DYNAMIC_CONTENT_URL = f"{BASE_URL}/dynamic_content"
+HORIZONTAL_URL = f"{BASE_URL}/horizontal_slider"
+HOVERS_URL = f"{BASE_URL}/hovers"
+LOGIN_URL = f"{BASE_URL}/basic_auth"
+NEW_WINDOW_URL = f"{BASE_URL}/windows"
+NEW_PAGE_URL = f"{BASE_URL}/windows/new"

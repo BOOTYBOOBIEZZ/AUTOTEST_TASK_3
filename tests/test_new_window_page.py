@@ -1,28 +1,45 @@
 from playwright.sync_api import Page
 
-from pages.windows_page import NewWindowPage
+from pages.new_window_page import NewWindowPage
+from pages.new_window_result_page import NewWindowResultPage
+from utils.browser_manager import BrowserManager
+from utils.url_utils import NEW_WINDOW_URL
 
 
 class TestNewWindow:
     def test_new_window(self, page: Page):
         new_window_page = NewWindowPage(page)
-        new_window_page.open()
+        browser_manager = BrowserManager(page.context)
 
-        opened_pages = []
+        new_window_page.open(NEW_WINDOW_URL)
 
-        for _ in range(2):
-            with new_window_page.expect_new_page() as new_page_info:
-                new_window_page.click_here()
-            new_page = new_page_info.value
+        first_tab = page
 
-            new_page.bring_to_front()
+        with page.context.expect_page() as new_page_info:
+            new_window_page.click_here()
+        new_page_1 = new_page_info.value
+        new_page_1.wait_for_load_state()
 
-            assert new_window_page.get_new_window_text() == "Opening a new window"
-            opened_pages.append(new_page)
+        result_page_1 = NewWindowResultPage(new_page_1)
+        assert result_page_1.get_result_text() == "New Window"
 
-            page.bring_to_front()
+        first_tab.bring_to_front()
 
-        for new_page in opened_pages:
-            new_page.close()
+        with page.context.expect_page() as new_page_info:
+            new_window_page.click_here()
+        new_page_2 = new_page_info.value
+        new_page_2.wait_for_load_state()
 
-        assert len(page.context.pages) == 1, "Должна быть открыта ровно 1 вкладка"
+        result_page_2 = NewWindowResultPage(new_page_2)
+
+        assert result_page_2.get_result_text() == "New Window"
+
+        first_tab.bring_to_front()
+
+        new_page_1.close()
+
+        new_page_2.close()
+
+        assert browser_manager.get_page_count() == 1, (
+            "Expected 1 page, got {browser_manager.get_page_count()}"
+        )

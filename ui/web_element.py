@@ -1,8 +1,9 @@
 import logging
 from pathlib import Path
 
-from logger import LOGGER_NAME
 from playwright.sync_api import Locator, Page
+
+from logger import LOGGER_NAME
 
 logger = logging.getLogger(LOGGER_NAME)
 

@@ -1,14 +1,21 @@
+import logging
+from typing import Counter
+
 from playwright.sync_api import Page
 
+from logger import LOGGER_NAME
 from pages.base_page import BasePage
 from ui.multi_web_element import MultiWebElement
+from ui.page_actions import PageActions
+
+logger = logging.getLogger(LOGGER_NAME)
 
 
 class DynamicContentPage(BasePage):
-    URL = "https://the-internet.herokuapp.com/dynamic_content"
-
     def __init__(self, page: Page):
         super().__init__(page)
+
+        self.actions = PageActions(page)
 
         self.images = MultiWebElement(
             locator=page.locator("img[src^='/img/avatars/']"),
@@ -16,26 +23,15 @@ class DynamicContentPage(BasePage):
             page=page,
         )
 
-    def open(self):
-        self.actions.goto(self.URL)
-
     def get_img_srcs(self):
         return [img.get_attribute("src") for img in self.images.all()]
 
     def get_image_count(self):
         return self.images.count()
 
-    def find_same_images(self):
+    def find_same_images(self) -> set[str]:
         srcs = self.get_img_srcs()
-        seen = set()
-        duplicates = set()
-
-        for src in srcs:
-            if src in seen:
-                duplicates.add(src)
-            seen.add(src)
-
-        return list(duplicates)
+        return {src for src in srcs if srcs.count(src) > 1}
 
     def has_duplicate_images(self) -> bool:
         return len(self.find_same_images()) > 0
@@ -43,8 +39,7 @@ class DynamicContentPage(BasePage):
     def refresh_until_duplicates(self, max_attempts: int = 10):
         for attempt in range(max_attempts):
             if self.has_duplicate_images():
-                print(f"Duplicates found after {attempt + 1} attempt(s)!")
+                logger.info(f"Duplicates found after {attempt + 1} attempt(s)!")
                 return True
             else:
                 self.page.reload()
-                self.images.locator.first.wait_for(state="visible")

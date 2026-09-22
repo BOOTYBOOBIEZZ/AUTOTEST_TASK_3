@@ -2,7 +2,7 @@ import pytest
 from playwright.sync_api import Page
 
 from pages.frames_page import FramesPage
-from ui.page_actions import PageActions
+from utils.url_utils import FRAMES_URL
 
 
 class TestFramesPage:
@@ -18,8 +18,8 @@ class TestFramesPage:
         self, page: Page, frame_name: str, expected_text: str, method_name: str
     ):
         frames_page = FramesPage(page)
-        self.actions = PageActions(page)
-        frames_page.open()
+
+        frames_page.open(FRAMES_URL)
 
         get_text_method = getattr(frames_page, method_name)
         actual_text = get_text_method()

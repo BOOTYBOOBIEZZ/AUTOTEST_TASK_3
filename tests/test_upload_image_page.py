@@ -1,21 +1,19 @@
 from playwright.sync_api import Page
 
 from pages.upload_image_page import UploadPage
-from ui.page_actions import PageActions
+from utils.url_utils import UPLOAD_URL
 
 
 class TestUploadPage:
     def test_upload_file(self, page: Page):
 
         upload_page = UploadPage(page)
-        self.actions = PageActions(page)
 
-        upload_page.open()
+        upload_page.open(UPLOAD_URL)
+
         file_path = "C:/WORK/pics/200x200.png"
 
         upload_page.upload_file(file_path)
-
-        upload_page.expect_uploaded_page()
 
         uploaded_text = upload_page.get_upload_text()
         assert uploaded_text == "File Uploaded!", (
