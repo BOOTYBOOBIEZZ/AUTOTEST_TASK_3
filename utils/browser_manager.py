@@ -21,8 +21,8 @@ class BrowserManager:
         pages = self.get_pages()
         if 0 <= index < len(pages):
             page = pages[index]
-            page.bring_to_front()
             logger.info(f"Switched to page {index}")
+            page.bring_to_front()
             return page
 
         return IndexError(f"Page index {index} out of range")

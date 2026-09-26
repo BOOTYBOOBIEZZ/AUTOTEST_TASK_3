@@ -1,13 +1,13 @@
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
-from ui.page_actions import PageActions
+
 from ui.web_element import WebElement
 
 
 class LoginPage(BasePage):
     def __init__(self, page: Page):
-        self.actions = PageActions(page)
+        super().__init__(page)
 
         self.success_message = WebElement(
             locator=page.locator("div.example p"),

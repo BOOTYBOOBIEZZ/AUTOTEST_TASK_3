@@ -3,15 +3,11 @@ from playwright.sync_api import Page
 from pages.new_window_page import NewWindowPage
 from pages.new_window_result_page import NewWindowResultPage
 from utils.browser_manager import BrowserManager
-from utils.url_utils import NEW_WINDOW_URL
 
 
 class TestNewWindow:
-    def test_new_window(self, page: Page):
-        new_window_page = NewWindowPage(page)
+    def test_new_window(self, new_window_page: NewWindowPage, page: Page):
         browser_manager = BrowserManager(page.context)
-
-        new_window_page.open(NEW_WINDOW_URL)
 
         first_tab = page
 
@@ -21,7 +17,11 @@ class TestNewWindow:
         new_page_1.wait_for_load_state()
 
         result_page_1 = NewWindowResultPage(new_page_1)
-        assert result_page_1.get_result_text() == "New Window"
+        expected_result_1 = "New Window"
+        actual_result_1 = result_page_1.get_result_text()
+        assert actual_result_1 == expected_result_1, (
+            f"Expected {expected_result_1}, but got {actual_result_1}"
+        )
 
         first_tab.bring_to_front()
 
@@ -32,7 +32,11 @@ class TestNewWindow:
 
         result_page_2 = NewWindowResultPage(new_page_2)
 
-        assert result_page_2.get_result_text() == "New Window"
+        expected_result_2 = "New Window"
+        actual_result_2 = result_page_2.get_result_text()
+        assert actual_result_2 == expected_result_2, (
+            f"Expected {expected_result_2}, but got {actual_result_2}"
+        )
 
         first_tab.bring_to_front()
 
@@ -40,6 +44,8 @@ class TestNewWindow:
 
         new_page_2.close()
 
-        assert browser_manager.get_page_count() == 1, (
-            "Expected 1 page, got {browser_manager.get_page_count()}"
+        expected_pages = 1
+        actual_pages = browser_manager.get_page_count()
+        assert expected_pages == actual_pages, (
+            f"Expected {expected_pages} page, got {actual_pages}"
         )

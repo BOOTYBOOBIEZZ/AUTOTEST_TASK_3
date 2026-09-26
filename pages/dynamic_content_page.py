@@ -1,5 +1,4 @@
 import logging
-from typing import Counter
 
 from playwright.sync_api import Page
 
@@ -14,8 +13,6 @@ logger = logging.getLogger(LOGGER_NAME)
 class DynamicContentPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
-
-        self.actions = PageActions(page)
 
         self.images = MultiWebElement(
             locator=page.locator("img[src^='/img/avatars/']"),

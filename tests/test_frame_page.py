@@ -1,8 +1,6 @@
 import pytest
-from playwright.sync_api import Page
 
 from pages.frames_page import FramesPage
-from utils.url_utils import FRAMES_URL
 
 
 class TestFramesPage:
@@ -15,11 +13,12 @@ class TestFramesPage:
 
     @pytest.mark.parametrize("frame_name, expected_text, method_name", FRAME_TEST_DATA)
     def test_frame_text(
-        self, page: Page, frame_name: str, expected_text: str, method_name: str
+        self,
+        frames_page: FramesPage,
+        frame_name: str,
+        expected_text: str,
+        method_name: str,
     ):
-        frames_page = FramesPage(page)
-
-        frames_page.open(FRAMES_URL)
 
         get_text_method = getattr(frames_page, method_name)
         actual_text = get_text_method()

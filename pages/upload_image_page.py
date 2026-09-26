@@ -1,13 +1,12 @@
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
-from ui.page_actions import PageActions
 from ui.web_element import WebElement
 
 
 class UploadPage(BasePage):
     def __init__(self, page: Page):
-        self.actions = PageActions(page)
+        super().__init__(page)
 
         self.choose_file_button = WebElement(
             locator=page.locator("#file-upload"), description="choose_button", page=page

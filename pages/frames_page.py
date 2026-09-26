@@ -1,13 +1,12 @@
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
-from ui.page_actions import PageActions
 from ui.web_element import WebElement
 
 
 class FramesPage(BasePage):
     def __init__(self, page: Page):
-        self.actions = PageActions(page)
+        super().__init__(page)
 
         self.top_frame = page.frame_locator("frame[name='frame-top']")
         self.bottom_frame = page.frame_locator("frame[name='frame-bottom']")

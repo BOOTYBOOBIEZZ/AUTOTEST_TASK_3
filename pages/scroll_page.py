@@ -1,11 +1,10 @@
 import logging
 
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
 from logger import LOGGER_NAME
 from pages.base_page import BasePage
 from ui.multi_web_element import MultiWebElement
-from ui.page_actions import PageActions
 from ui.web_element import WebElement
 
 logger = logging.getLogger(LOGGER_NAME)
@@ -14,7 +13,6 @@ logger = logging.getLogger(LOGGER_NAME)
 class ScrollPage(BasePage):
     def __init__(self, page: Page):
         super().__init__(page)
-        self.actions = PageActions(page)
 
         self.scroll_container = WebElement(
             locator=page.locator("#page"),
@@ -38,17 +36,11 @@ class ScrollPage(BasePage):
         return self.paragraphs.count()
 
     def scroll_to_bottom(self):
-        self.page.mouse.wheel(0, 5000)
+        self.last_paragraph.scroll_into_view_if_needed()
 
     def wait_for_more_paragraphs(self, current_count: int, timeout: int = 5000) -> None:
-        self.page.wait_for_function(
-            f"""
-            () => {{
-                const paragraphs = document.querySelectorAll('.jscroll-added');
-                return paragraphs.length > {current_count};
-            }}
-            """,
-            timeout=timeout,
+        self.paragraphs.nth(current_count).locator.wait_for(
+            state="attached", timeout=timeout
         )
 
     def scroll_until_paragraphs_count(
@@ -66,16 +58,12 @@ class ScrollPage(BasePage):
                 return current_count
 
             logger.info(
-                f"📜 Scroll {attempt + 1}: {current_count}/{target_count} paragraphs"
+                f"Scroll {attempt + 1}: {current_count}/{target_count} paragraphs"
             )
 
             self.scroll_to_bottom()
 
-            try:
-                self.wait_for_more_paragraphs(current_count, timeout=500)
-            except Exception:
-                logger.warning(f"No new paragraphs after scroll {attempt + 1}")
-                continue
+            self.wait_for_more_paragraphs(current_count)
 
         final_count = self.count_paragraphs()
         logger.info(f"Max scrolls reached. Final count: {final_count} paragraphs")

@@ -3,13 +3,12 @@ import random
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
-from ui.page_actions import PageActions
 from ui.web_element import WebElement
 
 
 class HorizontalSliderPage(BasePage):
     def __init__(self, page: Page):
-        self.actions = PageActions(page)
+        super().__init__(page)
 
         self.slider = WebElement(
             locator=page.get_by_role("slider"),
@@ -49,13 +48,13 @@ class HorizontalSliderPage(BasePage):
     def get_slider_value(self):
         return self.slider_value.get_text_content().strip()
 
-    def generate_random_steps(self):
-        min_val = self._get_slider_min()
-        max_val = self._get_slider_max()
-        step = self._get_slider_step()
+    # def generate_random_steps(self):
+    #     min_val = self._get_slider_min()
+    #     max_val = self._get_slider_max()
+    #     step = self._get_slider_step()
 
-        max_steps = int((max_val - min_val) / step)
-        return random.randint(1, max_steps)
+    #     max_steps = int((max_val - min_val) / step)
+    #     return random.randint(1, max_steps)
 
     def generate_random_value(self):
 

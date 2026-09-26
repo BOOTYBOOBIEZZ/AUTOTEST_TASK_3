@@ -2,12 +2,11 @@ from playwright.sync_api import Page
 
 from pages.base_page import BasePage
 from ui.multi_web_element import MultiWebElement
-from ui.page_actions import PageActions
 
 
 class DownloadPage(BasePage):
     def __init__(self, page: Page):
-        self.actions = PageActions(page)
+        super().__init__(page)
 
         self.files = MultiWebElement(
             locator=page.locator(".example a"),
