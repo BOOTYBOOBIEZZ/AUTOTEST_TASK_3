@@ -1,7 +1,6 @@
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
-
 from ui.web_element import WebElement
 
 

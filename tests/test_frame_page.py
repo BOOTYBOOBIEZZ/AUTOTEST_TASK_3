@@ -1,27 +1,27 @@
 import pytest
 
 from pages.frames_page import FramesPage
+from utils.frame_name import FrameName
 
 
 class TestFramesPage:
-    FRAME_TEST_DATA = (
-        ("left", "LEFT", "get_left_frame_text"),
-        ("middle", "MIDDLE", "get_middle_frame_text"),
-        ("right", "RIGHT", "get_right_frame_text"),
-        ("bottom", "BOTTOM", "get_bottom_frame_text"),
+    @pytest.mark.parametrize(
+        "frame_name, expected_text",
+        [
+            (FrameName.LEFT, "LEFT"),
+            (FrameName.MIDDLE, "MIDDLE"),
+            (FrameName.RIGHT, "RIGHT"),
+            (FrameName.BOTTOM, "BOTTOM"),
+        ],
     )
-
-    @pytest.mark.parametrize("frame_name, expected_text, method_name", FRAME_TEST_DATA)
     def test_frame_text(
         self,
         frames_page: FramesPage,
-        frame_name: str,
+        frame_name: FrameName,
         expected_text: str,
-        method_name: str,
     ):
 
-        get_text_method = getattr(frames_page, method_name)
-        actual_text = get_text_method()
+        actual_text = frames_page.get_frame_text(frame_name)
 
         assert actual_text == expected_text, (
             f"AssertionError in '{frame_name}. /n"

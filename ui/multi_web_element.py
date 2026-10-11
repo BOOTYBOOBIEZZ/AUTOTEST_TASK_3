@@ -1,15 +1,20 @@
-from playwright.sync_api import Locator, Page
-from typing_extensions import Self
+import logging
+from typing import Self
 
+from playwright.sync_api import Locator, Page
+
+from logger import LOGGER_NAME
 from ui.web_element import WebElement
+
+logger = logging.getLogger(LOGGER_NAME)
 
 
 class MultiWebElement:
     def __init__(
-            self,
-            page: Page,
-            locator: Locator,
-            description: str,
+        self,
+        page: Page,
+        locator: Locator,
+        description: str,
     ) -> None:
         self.page = page
         self.locator = locator
@@ -37,6 +42,10 @@ class MultiWebElement:
             locator=self.locator.nth(index),
             description=f"{self.description}[{index}]",
         )
+
+    def wait_for(self, state: str = "attached", timeout: int = 5000):
+        logger.info(f"{self}: wait for state '{state}'")
+        self.locator.first.wait_for(state="attached", timeout=timeout)
 
     def first(self) -> WebElement:
         return WebElement(

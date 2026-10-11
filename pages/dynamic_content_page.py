@@ -5,7 +5,6 @@ from playwright.sync_api import Page
 from logger import LOGGER_NAME
 from pages.base_page import BasePage
 from ui.multi_web_element import MultiWebElement
-from ui.page_actions import PageActions
 
 logger = logging.getLogger(LOGGER_NAME)
 
@@ -35,8 +34,8 @@ class DynamicContentPage(BasePage):
 
     def refresh_until_duplicates(self, max_attempts: int = 10):
         for attempt in range(max_attempts):
+            self.page.reload(wait_until="domcontentloaded", timeout=60000)
             if self.has_duplicate_images():
                 logger.info(f"Duplicates found after {attempt + 1} attempt(s)!")
                 return True
-            else:
-                self.page.reload()
+            return False

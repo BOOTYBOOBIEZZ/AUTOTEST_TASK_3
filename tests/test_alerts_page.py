@@ -1,11 +1,8 @@
-import pytest
-
 from pages.alerts_page import AlertsPage
 from utils.random import RandomText
 
 
 class TestAlertsPage:
-    @pytest.fixture(autouse=True)
     def test_js_alert(self, alerts_page: AlertsPage):
 
         dialog_message = alerts_page.click_js_alert_button()
@@ -14,7 +11,7 @@ class TestAlertsPage:
             f"Expected '{expected_message}', but got '{dialog_message}'"
         )
         result_text = alerts_page.get_result_text()
-        expected_text = "You successfully clicked an alert"
+        expected_text = "You successfuly clicked an alert"
         assert result_text == expected_text, (
             f"Expected '{expected_text}', but got '{result_text}'"
         )

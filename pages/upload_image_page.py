@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from playwright.sync_api import Page
 
 from pages.base_page import BasePage
@@ -30,8 +32,8 @@ class UploadPage(BasePage):
             page=page,
         )
 
-    def upload_file(self, file_path: str):
-        self.choose_file_button.locator.set_input_files(file_path)
+    def upload_file(self, file_path: str | Path):
+        self.choose_file_button.set_input_files(file_path)
         self.upload_button.click()
 
     def get_upload_text(self):

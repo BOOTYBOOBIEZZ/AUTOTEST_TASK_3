@@ -68,6 +68,10 @@ class WebElement:
         logger.info(f"{self}: scroll into view if needed")
         self.locator.scroll_into_view_if_needed()
 
-    def set_input_files(self, file_path: Path) -> None:
+    def set_input_files(self, file_path: str | Path) -> None:
         logger.info(f"{self}: set input files '{file_path}'")
         self.locator.set_input_files(file_path)
+
+    def wait_for(self, state: str = "visible", timeout: int = 5000):
+        logger.info(f"{self}: wait for state '{state}'")
+        self.locator.wait_for(state="attached", timeout=timeout)

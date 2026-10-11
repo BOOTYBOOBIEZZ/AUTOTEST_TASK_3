@@ -36,13 +36,11 @@ class AlertsPage(BasePage):
         )
 
     def click_js_confirm_and_accept(self):
-        """Кликает и принимает confirm."""
         return self.actions.run_and_accept_alert(
             action=lambda: self.js_confirm_button.click()
         )
 
     def click_js_confirm_and_dismiss(self):
-        """Кликает и отклоняет confirm."""
         return self.actions.run_and_dismiss_alert(
             action=lambda: self.js_confirm_button.click()
         )
@@ -54,7 +52,4 @@ class AlertsPage(BasePage):
         )
 
     def get_result_text(self) -> str:
-        return self.actions.get_text(self.result_text)
-
-    def wait_for_open(self):
-        self.js_alert_button.locator.wait_for(state="visible")
+        return self.result_text.get_text_content().strip()

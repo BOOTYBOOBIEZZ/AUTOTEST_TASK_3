@@ -2,6 +2,7 @@ from playwright.sync_api import Page
 
 from pages.base_page import BasePage
 from ui.web_element import WebElement
+from utils.frame_name import FrameName
 
 
 class FramesPage(BasePage):
@@ -39,6 +40,13 @@ class FramesPage(BasePage):
             page=page,
         )
 
+        self._frames = {
+            FrameName.LEFT: self._left_frame_text,
+            FrameName.MIDDLE: self._middle_frame_text,
+            FrameName.RIGHT: self._right_frame_text,
+            FrameName.BOTTOM: self._bottom_frame_text,
+        }
+
     def get_left_frame_text(self):
         return self.actions.get_text(self._left_frame_text)
 
@@ -51,13 +59,7 @@ class FramesPage(BasePage):
     def get_bottom_frame_text(self):
         return self.actions.get_text(self._bottom_frame_text)
 
-    def get_frame_text(self, frame_name: str):
-        frames = {
-            "left": self._left_frame_text,
-            "right": self._right_frame_text,
-            "middle": self._middle_frame_text,
-            "bottom": self._bottom_frame_text,
-        }
-        if frame_name not in frames:
-            raise ValueError
-        return frames[frame_name].get_inner_text()
+    def get_frame_text(self, frame_name: FrameName):
+        if frame_name not in self._frames:
+            raise ValueError(f"Unknown frame: '{frame_name}'. ")
+        return self._frames[frame_name].get_inner_text()

@@ -32,6 +32,9 @@ class ScrollPage(BasePage):
             page=page,
         )
 
+    def wait_for_first_paragraph(self, timeout: int = 30_000) -> None:
+        self.paragraphs.wait_for(state="attached", timeout=timeout)
+
     def count_paragraphs(self):
         return self.paragraphs.count()
 
@@ -39,9 +42,7 @@ class ScrollPage(BasePage):
         self.last_paragraph.scroll_into_view_if_needed()
 
     def wait_for_more_paragraphs(self, current_count: int, timeout: int = 5000) -> None:
-        self.paragraphs.nth(current_count).locator.wait_for(
-            state="attached", timeout=timeout
-        )
+        self.paragraphs.nth(current_count).wait_for(state="attached", timeout=timeout)
 
     def scroll_until_paragraphs_count(
         self,
