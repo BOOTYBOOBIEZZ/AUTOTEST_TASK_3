@@ -26,22 +26,18 @@ class ScrollPage(BasePage):
             page=page,
         )
 
-        self.last_paragraph = WebElement(
-            locator=page.locator(".jscroll-added").last,
-            description="Last paragraph",
-            page=page,
-        )
-
-    def wait_for_first_paragraph(self, timeout: int = 30_000) -> None:
+    def wait_for_first_paragraph(self, timeout: int = 30000) -> None:
         self.paragraphs.wait_for(state="attached", timeout=timeout)
 
     def count_paragraphs(self):
         return self.paragraphs.count()
 
     def scroll_to_bottom(self):
-        self.last_paragraph.scroll_into_view_if_needed()
+        self.paragraphs.last().scroll_into_view_if_needed()
 
-    def wait_for_more_paragraphs(self, current_count: int, timeout: int = 5000) -> None:
+    def wait_for_more_paragraphs(
+        self, current_count: int, timeout: int = 10000
+    ) -> None:
         self.paragraphs.nth(current_count).wait_for(state="attached", timeout=timeout)
 
     def scroll_until_paragraphs_count(

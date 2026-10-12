@@ -1,4 +1,6 @@
-BASE_URL = "http://localhost:7080"
+# BASE_URL = "http://localhost:7080"
+
+BASE_URL = "https://the-internet.herokuapp.com"
 
 ALERTS_URL = f"{BASE_URL}/javascript_alerts"
 DOWNLOAD_URL = f"{BASE_URL}/download"

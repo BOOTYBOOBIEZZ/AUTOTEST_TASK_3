@@ -9,7 +9,6 @@ class DownloadPage(BasePage):
         super().__init__(page)
 
         self.files = MultiWebElement(
-            # locator=page.locator(".example a"),
             locator=page.locator("a"),
             description="all file for download",
             page=page,

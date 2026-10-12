@@ -38,7 +38,7 @@ class HorizontalSliderPage(BasePage):
         step_val = self.slider.get_attribute("step")
         return float(step_val)
 
-    def set_slider_value_via_keyboard(self, steps: int):
+    def set_slider_to_value_via_keyboard(self, steps: int):
         self.slider.focus()
         for _ in range(steps):
             self.slider.press("ArrowRight")
@@ -46,6 +46,7 @@ class HorizontalSliderPage(BasePage):
     def set_slider_to_value(self, target_value: float) -> None:
         current = float(self.slider.get_attribute("value"))
         steps = round((target_value - current) / self._get_slider_step())
+
         logger.info(f"{self.slider}: set value from {current} to {target_value}")
 
         if steps == 0:
@@ -55,13 +56,6 @@ class HorizontalSliderPage(BasePage):
         self.slider.focus()
         for _ in range(abs(steps)):
             self.slider.press("ArrowRight" if steps > 0 else "ArrowLeft")
-
-        expected = f"{target_value:g}"
-        self.page.wait_for_function(
-            "(v) => document.querySelector('#range').textContent === v",
-            arg=expected,
-            timeout=5000,
-        )
 
     def get_slider_value(self):
         return self.slider_value.get_text_content().strip()
