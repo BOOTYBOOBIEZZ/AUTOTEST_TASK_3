@@ -34,7 +34,7 @@ class DynamicContentPage(BasePage):
 
     def refresh_until_duplicates(self, max_attempts: int = 100):
         for attempt in range(max_attempts):
-            self.page.reload(wait_until="domcontentloaded", timeout=60000)
+            self.page.reload(wait_until="load", timeout=1000)
             if self.has_duplicate_images():
                 logger.info(f"Duplicates found after {attempt + 1} attempt(s)!")
                 return True

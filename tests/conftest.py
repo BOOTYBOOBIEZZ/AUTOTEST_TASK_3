@@ -32,16 +32,11 @@ from utils.url_utils import (
 
 load_dotenv()
 
-YANDEX_PATH = (
-    r"C:\Users\BTBBBZZ\AppData\Local\Yandex\YandexBrowser\Application\browser.exe"
-)
+YANDEX_PATH = os.getenv("YANDEX_PATH")
 
 
 @pytest.fixture(scope="session")
 def browser(playwright, browser_type_launch_args):
-    """
-    Запускает Яндекс.Браузер вместо Chromium.
-    """
     browser = playwright.chromium.launch(
         executable_path=YANDEX_PATH,
         headless=False,
@@ -134,7 +129,7 @@ def new_window_page(page: Page) -> NewWindowPage:
 def scroll_page(page: Page) -> ScrollPage:
     page.goto(SCROLL_URL, wait_until="commit", timeout=60_000)
     scroll_page = ScrollPage(page)
-    scroll_page.wait_for_first_paragraph(timeout=60_000)
+    scroll_page.wait_for_first_paragraph(timeout=500)
     return scroll_page
 
 

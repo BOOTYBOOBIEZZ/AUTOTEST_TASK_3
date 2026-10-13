@@ -48,16 +48,16 @@ class FramesPage(BasePage):
         }
 
     def get_left_frame_text(self):
-        return self.actions.get_text(self._left_frame_text)
+        return self._left_frame_text.get_inner_text()
 
     def get_right_frame_text(self):
-        return self.actions.get_text(self._right_frame_text)
+        return self._right_frame_text.get_inner_text()
 
     def get_middle_frame_text(self):
-        return self.actions.get_text(self._middle_frame_text)
+        return self._middle_frame_text.get_inner_text()
 
     def get_bottom_frame_text(self):
-        return self.actions.get_text(self._bottom_frame_text)
+        return self._bottom_frame_text.get_inner_text()
 
     def get_frame_text(self, frame_name: FrameName):
         if frame_name not in self._frames:
